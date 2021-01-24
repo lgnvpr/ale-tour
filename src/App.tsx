@@ -9,7 +9,7 @@ import EditTourPopUp from "./container/EditTourPopUp";
 export type TourType = {
 	top?: number;
 	left?: number;
-	title?: string;
+	title?: any;
 	index?: number;
 } & ReactourStep;
 function App() {
@@ -26,7 +26,8 @@ function App() {
 			setEdit(!isEdit);
 			return;
 		}
-		if (isEdit) {
+		if (isEdit && element.id !== "btn-save-tour") {
+			console.log("on edit ")
 			const path = getDomPath(element);
 			setSelected({
 				content: Math.random() * 1,
@@ -35,6 +36,10 @@ function App() {
 			});
 			setEdit(false)
 			setShowPopupEdit(true);
+			const getMyDiv = document.getElementById("myDiv");
+			element.style.background = `${getMyDiv?.style.background}`;
+			element.style.cursor = `${getMyDiv?.style.cursor}`;
+			getMyDiv?.remove();
 		}
 	};
 
@@ -78,6 +83,25 @@ function App() {
 			}
 		}
 	};
+	
+	var btnSave1 = document.querySelectorAll("#btn-save-tour");
+	var btnEdit1 = document.querySelectorAll("#edit-tour");
+	setAutoId(btnSave1, "btn-save-tour");
+	setAutoId(btnEdit1, "edit-tour")
+	
+
+	function setAutoId(element:NodeListOf<Element>, id : string){
+		for (let i = 0; i < element.length; i++) {
+			const getElement = element[i];
+			getElement.id = id;
+			if(getElement.hasChildNodes()){
+				setAutoId(getElement.childNodes as NodeListOf<Element>, id);
+			}
+			
+		}
+	}
+
+
 
 	function getDomPath(el: Element) {
 		if (!el) {
@@ -123,10 +147,13 @@ function App() {
 	return (
 		<div className="App">
 			<Box style={{ position: "fixed", bottom: 60, right: 20 }}>
-				<IconButton >
+				<IconButton id="edit-tour">
 					<SettingsOutlined id="edit-tour" fontSize="small" />
 				</IconButton>
-				<IconButton id="test-tour" onClick={(e) => setTest(true)}>
+				<IconButton id="test-tour" onClick={(e) => {
+					console.log(tourConfig)
+					setTest(true)
+				}}>
 					<PlayCircleOutline fontSize="small" />
 				</IconButton>
 			</Box>
@@ -145,8 +172,12 @@ function App() {
 				onCancel={() => {
 					setShowPopupEdit(false)
 				}}
-				item = {{}as any}
-				onSave = {()=>{}}
+				item = {selected}
+				onSave = {(item)=>{
+					setTourConfig([...tourConfig, {...item}])
+					setEdit(!isEdit);
+					setShowPopupEdit(false);
+				}}
 			></EditTourPopUp>
 		</div>
 	);

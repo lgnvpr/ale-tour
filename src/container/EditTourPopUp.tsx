@@ -12,12 +12,15 @@ import {
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import SaveIcon from "@material-ui/icons/Save";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { TourType } from "../App";
 
 function EditTourPopUp(props: Props) {
-	// const [item, setItem] = useState<P>()
+	const [item, setItem] = useState<TourType>();
+	useEffect(() => {
+		setItem(props.item)
+	}, [props])
 	return (
 		<Dialog open={props.isDisplay} fullWidth maxWidth="md">
 			<DialogTitle id="customized-dialog-title">
@@ -41,7 +44,9 @@ function EditTourPopUp(props: Props) {
 			<DialogContent>
 				<Grid container xs={12} direction="column" style={{ marginTop: 8 }}>
 					<Grid style={{ marginBottom: 24 }} item xs={12}>
-						<TextField fullWidth variant="outlined" label={"Path"} />
+						<TextField fullWidth variant="outlined" label={"Path"} 
+							
+						/>
 					</Grid>
 
 					<Grid item>
@@ -62,6 +67,10 @@ function EditTourPopUp(props: Props) {
              bullist numlist outdent indent | removeformat | help | code",
 							}}
 							onEditorChange={(value, editor) => {
+								setItem({
+									...item,
+									content: value || ""
+								})
 								console.log(value);
 							}}
 						/>
@@ -72,6 +81,7 @@ function EditTourPopUp(props: Props) {
 				<Grid item container xs={12} justify={"space-between"}>
 					<Grid item container xs={3} justify={"center"} alignItems={"center"}>
 						<Button
+							id = "btn-save-tour"
 							startIcon={<CloseIcon />}
 							variant="contained"
 							// size="medium"
@@ -86,12 +96,16 @@ function EditTourPopUp(props: Props) {
 					</Grid>
 					<Grid item container xs={3} justify={"center"} alignItems={"center"}>
 						<Button
+							id = "btn-save-tour"
 							variant="contained"
 							size="medium"
 							fullWidth
 							startIcon={<SaveIcon />}
 							type={"submit"}
 							color="primary"
+							onClick = {(e)=>{
+								props.onSave(item || {} as TourType);
+							}}
 						>
 							OK
 						</Button>
@@ -106,7 +120,7 @@ type Props = {
 	isDisplay: boolean;
 	onCancel(): void;
 	item : TourType;
-	onSave():void
+	onSave(item : TourType):void
 };
 
 export default EditTourPopUp;
