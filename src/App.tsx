@@ -5,6 +5,8 @@ import Demo from "./container/Demo";
 import Tour, { ReactourStep } from "reactour";
 import styled, { createGlobalStyle } from "styled-components";
 import EditTour from "./container/EditTour";
+import EditTourPopUp from "./container/EditTourPopUp";
+import { Box } from "@material-ui/core";
 
 const tourConfig: ReactourStep[] = [
 	{
@@ -55,8 +57,7 @@ const tourConfig: ReactourStep[] = [
 	},
 	{
 		selector: '[data-tut="reactour__action"]',
-		content:
-			"When arrived on each place you could fire an action, like… (look at the console)",
+		content: "When arrived on each place you could fire an action, like… (look at the console)",
 		action: () =>
 			console.log(`
                   ------------🏠🏚---------
@@ -164,9 +165,7 @@ function App() {
 				isShadow = false;
 			}
 			if (sibCount > 1) {
-				stack.unshift(
-					nodeName + ":nth-of-type(" + (sibIndex + 1) + ")"
-				);
+				stack.unshift(nodeName + ":nth-of-type(" + (sibIndex + 1) + ")");
 			} else {
 				stack.unshift(nodeName);
 			}
@@ -180,14 +179,21 @@ function App() {
 		return stack.join(" > ");
 	}
 
+	const [editTour, setEditTour] = useState(false);
+
 	return (
 		<div className="App">
-			<button id="edit-tour">Edit</button>
+			<Box style={{ position: "fixed", bottom: 60, right: 20 }}>
+				<button id="edit-tour">Edit</button>
 
-			<button id="test-tour" onClick={(e) => setTest(true)}>
-				Test
-			</button>
+				<button id="test-tour" onClick={(e) => setTest(true)}>
+					Test
+				</button>
 
+				<button id="test-tour" onClick={(e) => setEditTour(true)}>
+					Pop Up
+				</button>
+			</Box>
 			<Demo></Demo>
 			<Tour
 				steps={tourConfig}
@@ -201,6 +207,7 @@ function App() {
 					console.log(cu);
 				}}
 			/>
+			<EditTourPopUp isDisplay={editTour} onCancel={() => setEditTour(false)}></EditTourPopUp>
 		</div>
 	);
 }
