@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
-import logo from "./logo.svg";
+import { Box, IconButton } from "@material-ui/core";
+import { PlayCircleOutline, SettingsOutlined } from "@material-ui/icons";
+import React, { useState } from "react";
+import Tour, { ReactourStep } from "reactour";
 import "./App.css";
 import Demo from "./container/Demo";
-import Tour, { ReactourStep } from "reactour";
-import styled, { createGlobalStyle } from "styled-components";
-import EditTour from "./container/EditTour";
 import EditTourPopUp from "./container/EditTourPopUp";
-import { Box } from "@material-ui/core";
 
 const tourConfig: ReactourStep[] = [
 	{
@@ -87,7 +85,7 @@ function App() {
 		const element: HTMLElement = e.target as any;
 		if (element.id === "edit-tour") {
 			setEdit(!isEdit);
-			element.innerHTML = isEdit ? "edit" : "done";
+			// element.innerHTML = isEdit ? "edit" : "done";
 			return;
 		}
 		if (isEdit) {
@@ -184,15 +182,15 @@ function App() {
 	return (
 		<div className="App">
 			<Box style={{ position: "fixed", bottom: 60, right: 20 }}>
-				<button id="edit-tour">Edit</button>
-
-				<button id="test-tour" onClick={(e) => setTest(true)}>
-					Test
-				</button>
-
-				<button id="test-tour" onClick={(e) => setEditTour(true)}>
+				<IconButton >
+					<SettingsOutlined id="edit-tour" fontSize="small" />
+				</IconButton>
+				<IconButton id="test-tour" onClick={(e) => setTest(true)}>
+					<PlayCircleOutline fontSize="small" />
+				</IconButton>
+				{/* <button id="test-tour" onClick={(e) => setEditTour(true)}>
 					Pop Up
-				</button>
+				</button> */}
 			</Box>
 			<Demo></Demo>
 			<Tour
