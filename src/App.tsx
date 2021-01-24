@@ -6,71 +6,6 @@ import "./App.css";
 import Demo from "./container/Demo";
 import EditTourPopUp from "./container/EditTourPopUp";
 
-const tourConfig: ReactourStep[] = [
-	{
-		selector: '[data-tut="reactour__iso"]',
-		content: `Ok, let's start with the name of the Tour that is about to begin.`,
-		stepInteraction: true,
-		navDotAriaLabel: "abcxyz",
-		action: () => {
-			console.log("aaaa");
-		},
-	},
-	{
-		selector: '[data-tut="reactour__logo"]',
-		content: `And this is our cool bus...`,
-	},
-	{
-		selector: '[data-tut="reactour__copy"]',
-		content: `Keep in mind that you could try and test everithing during the Tour. 
-      For example, try selecting the highlighted text…`,
-	},
-	{
-		selector: '[data-tut="reactour__style"]',
-		content: () => <div>aaaaa</div>,
-		style: {
-			backgroundColor: "black",
-			color: "white",
-		},
-	},
-	{
-		selector: '[data-tut="reactour__goTo"]',
-		content:
-			"Probably you noted that the Tour scrolled directly to the desired place, and you could control the time also…",
-	},
-	{
-		selector: '[data-tut="reactour__position"]',
-		content:
-			"Probably you noted that the Tour scrolled directly to the desired place, and you could control the time also…",
-		position: "left",
-	},
-	{
-		selector: '[data-tut="reactour__scroll"]',
-		content:
-			"Probably you noted that the Tour scrolled directly to the desired place, and you could control the time also…",
-	},
-	{
-		selector: '[data-tut="reactour__scroll--hidden"]',
-		content: "Also when places are pretty hidden…",
-	},
-	{
-		selector: '[data-tut="reactour__action"]',
-		content: "When arrived on each place you could fire an action, like… (look at the console)",
-		action: () =>
-			console.log(`
-                  ------------🏠🏚---------
-      🚌 Arrived to explore these beautiful buildings! 🚌
-                  ------------🏠🏚---------
-   🚧 This action could also fire a method in your Component 🚧
-    `),
-	},
-	{
-		selector: '[data-tut="reactour__state"]',
-		content:
-			"And the Tour could be observing changes to update the view, try clicking the button…",
-	},
-];
-
 export type TourType = {
 	top?: number;
 	left?: number;
@@ -81,23 +16,24 @@ function App() {
 	const [tourConfig, setTourConfig] = useState<TourType[]>([]);
 	const [isEdit, setEdit] = useState<boolean>(false);
 	const [isTest, setTest] = useState<boolean>(false);
+	const [selected, setSelected] = useState<TourType>({
+		content: "",
+	});
+	const [isShowPopupEdit, setShowPopupEdit] = useState<boolean>(false);
 	document.onclick = (e) => {
 		const element: HTMLElement = e.target as any;
 		if (element.id === "edit-tour") {
 			setEdit(!isEdit);
-			// element.innerHTML = isEdit ? "edit" : "done";
 			return;
 		}
 		if (isEdit) {
 			const path = getDomPath(element);
-			setTourConfig([
-				...tourConfig,
-				{
-					content: Math.random() * 1,
-					selector: path,
-					title: "3232",
-				},
-			]);
+			setSelected({
+				content: Math.random() * 1,
+				selector: path,
+				title: "3232",
+			});
+			setShowPopupEdit(true);
 		}
 	};
 
@@ -112,6 +48,9 @@ function App() {
 	};
 
 	document.onmouseover = (e) => {
+		if(isShowPopupEdit){
+			return
+		}
 		const element: HTMLElement = e.target as any;
 		if (element.id === "edit-tour" || element.id === "test-tour") {
 			element.style.cursor = "default";
@@ -139,7 +78,7 @@ function App() {
 		}
 	};
 
-	function getDomPath(el: any) {
+	function getDomPath(el: Element) {
 		if (!el) {
 			return;
 		}
@@ -150,7 +89,7 @@ function App() {
 			var sibIndex = 0;
 			for (var i = 0; i < el.parentNode.childNodes.length; i++) {
 				var sib = el.parentNode.childNodes[i];
-				if (sib.nodeName == el.nodeName) {
+				if (sib.nodeName === el.nodeName) {
 					if (sib === el) {
 						sibIndex = sibCount;
 					}
@@ -163,21 +102,22 @@ function App() {
 				isShadow = false;
 			}
 			if (sibCount > 1) {
-				stack.unshift(nodeName + ":nth-of-type(" + (sibIndex + 1) + ")");
+				stack.unshift(
+					nodeName + ":nth-of-type(" + (sibIndex + 1) + ")"
+				);
 			} else {
 				stack.unshift(nodeName);
 			}
-			el = el.parentNode;
+			el = el.parentNode as Element;
 			if (el.nodeType === 11) {
 				isShadow = true;
-				el = el.host;
+				const cp: any = el;
+				el = cp.host;
 			}
 		}
 		stack.splice(0, 1);
 		return stack.join(" > ");
 	}
-
-	const [editTour, setEditTour] = useState(false);
 
 	return (
 		<div className="App">
@@ -188,9 +128,6 @@ function App() {
 				<IconButton id="test-tour" onClick={(e) => setTest(true)}>
 					<PlayCircleOutline fontSize="small" />
 				</IconButton>
-				{/* <button id="test-tour" onClick={(e) => setEditTour(true)}>
-					Pop Up
-				</button> */}
 			</Box>
 			<Demo></Demo>
 			<Tour
@@ -201,11 +138,13 @@ function App() {
 				rounded={5}
 				accentColor={"#5cb7b7"}
 				onRequestClose={() => {}}
-				getCurrentStep={(cu) => {
-					console.log(cu);
-				}}
 			/>
-			<EditTourPopUp isDisplay={editTour} onCancel={() => setEditTour(false)}></EditTourPopUp>
+			<EditTourPopUp
+				isDisplay={isShowPopupEdit}
+				onCancel={() => setShowPopupEdit(false)}
+				item = {{}as any}
+				onSave = {()=>{}}
+			></EditTourPopUp>
 		</div>
 	);
 }

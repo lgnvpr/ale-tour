@@ -14,6 +14,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import SaveIcon from "@material-ui/icons/Save";
 import React from "react";
 import { Editor } from "@tinymce/tinymce-react";
+import { TourType } from "../App";
 
 function EditTourPopUp(props: Props) {
 	// const [item, setItem] = useState<P>()
@@ -104,6 +105,8 @@ function EditTourPopUp(props: Props) {
 type Props = {
 	isDisplay: boolean;
 	onCancel(): void;
+	item : TourType;
+	onSave():void
 };
 
 export default EditTourPopUp;
