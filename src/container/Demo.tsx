@@ -9,7 +9,7 @@ export default function Demo() {
 			</h2>
 			<div className="container" id="container">
 				<div className="form-container sign-up-container">
-					<form action="#">
+					<div className = "form">
 						<h1 tour-flynotes="5">Create Account</h1>
 						<div className="social-container">
 							<label className="social" tour-flynotes="2">
@@ -27,10 +27,10 @@ export default function Demo() {
 						<input type="email" placeholder="Email" />
 						<input type="password" placeholder="Password" />
 						<button >Sign Up</button>
-					</form>
+					</div>
 				</div>
 				<div className="form-container sign-in-container">
-					<form action="#">
+					<div className = "form">
 						<h1 tour-flynotes="3">Sign in</h1>
 						<div className="social-container">
 							<label className="social" >
@@ -48,7 +48,7 @@ export default function Demo() {
 						<input type="password" placeholder="Password" />
 						<label>Forgot your password?</label>
 						<button>Sign In</button>
-					</form>
+					</div>
 				</div>
 				<div className="overlay-container">
 					<div className="overlay">

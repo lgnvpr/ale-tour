@@ -33,6 +33,7 @@ function App() {
 				selector: path,
 				title: "3232",
 			});
+			setEdit(false)
 			setShowPopupEdit(true);
 		}
 	};
@@ -141,7 +142,9 @@ function App() {
 			/>
 			<EditTourPopUp
 				isDisplay={isShowPopupEdit}
-				onCancel={() => setShowPopupEdit(false)}
+				onCancel={() => {
+					setShowPopupEdit(false)
+				}}
 				item = {{}as any}
 				onSave = {()=>{}}
 			></EditTourPopUp>
