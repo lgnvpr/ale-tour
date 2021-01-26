@@ -47,7 +47,7 @@ export default function Demo() {
 						<input type="email" placeholder="Email" />
 						<input type="password" placeholder="Password" />
 						<label>Forgot your password?</label>
-						<button>Sign In</button>
+						<button className ="test">Sign In</button>
 					</div>
 				</div>
 				<div className="overlay-container">
